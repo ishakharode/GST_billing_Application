@@ -1,0 +1,181 @@
+{
+  "info": {
+    "name": "GST Billing API",
+    "description": "Spring Boot GST Billing Application REST API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Business",
+      "item": [
+        {
+          "name": "Register Business",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/business" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessName\": \"TechMart Pvt Ltd\",\n  \"gstNumber\": \"27AABCT1332L1ZV\",\n  \"address\": \"Andheri, Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"phone\": \"9876543210\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Business by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/business/1" }
+          }
+        },
+        {
+          "name": "Get All Businesses (Paginated)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/business?page=0&size=10&sortBy=businessName&sortDir=asc"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Add Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/products" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"Laptop Core i5\",\n  \"price\": 45000.00,\n  \"gstPercentage\": 18\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Products (Paginated)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products?page=0&size=10" }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products/1" }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/products/1" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"Laptop Core i7\",\n  \"price\": 65000.00,\n  \"gstPercentage\": 18\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/products/1" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "Create Invoice (Intra-State - CGST+SGST)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/invoices" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessId\": 1,\n  \"customerName\": \"Rohan Sharma\",\n  \"customerState\": \"Maharashtra\",\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 2 },\n    { \"productId\": 2, \"quantity\": 3 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Invoice (Inter-State - IGST)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/invoices" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessId\": 1,\n  \"customerName\": \"Amit Patel\",\n  \"customerState\": \"Gujarat\",\n  \"items\": [\n    { \"productId\": 1, \"quantity\": 1 },\n    { \"productId\": 3, \"quantity\": 2 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Invoice by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/invoices/1" }
+          }
+        },
+        {
+          "name": "Get All Invoices (Paginated)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/invoices?page=0&size=10&sortBy=invoiceDate&sortDir=desc" }
+          }
+        },
+        {
+          "name": "Get Invoices by Business",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/invoices/business/1?page=0&size=10" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "item": [
+        {
+          "name": "Invalid GST Number (not 15 chars)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/business" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessName\": \"Test Corp\",\n  \"gstNumber\": \"SHORT\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Invalid GST Rate (not 0/5/12/18/28)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/products" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"Test\",\n  \"price\": 100.0,\n  \"gstPercentage\": 15\n}"
+            }
+          }
+        },
+        {
+          "name": "Business Not Found (404)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/business/9999" }
+          }
+        }
+      ]
+    }
+  ]
+}
